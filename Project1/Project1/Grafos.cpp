@@ -1,4 +1,4 @@
-//Aluno: Jo„o Pedro de Melo Cabana
+//Aluno: Jo√£o Pedro de Melo Cabana
 //Turno: Noite
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <iostream>
-#include <string>
+#include <queue>
 
 //numero maximo de vertices
 #define  MAX_NUM_VERT  50
@@ -35,6 +35,7 @@ void ler_grafo(const char caminho[]);
 void imprime_grafo(no* adj[], int n);
 void converter(no *adj[], int n);
 void defineGrau(no *adj[], int n);
+void BFS(no *adj[], int n);
 
 // Funcao principal (ponto de entrada do programa).
 int main() {
@@ -54,6 +55,8 @@ int main() {
 
 	defineGrau(lista_adj, numVertices);
 	//libera memoria
+
+	BFS(lista_adj, numVertices);
 	desaloca_grafo(lista_adj, numVertices);
 
 	//espera digitar um caracter
@@ -80,13 +83,13 @@ void insere_adjacente(no *adj[], int v, int sucessor) {
 
 	if (adj[v] == NULL) {
 		// se for o primeiro elemento inserido na lista, 
-		// a cabeÁa da lista passa a apontar para ele
+		// a cabe√ßa da lista passa a apontar para ele
 		adj[v] = novo;
 
 	}
 	else {
 		// se nao for o primeiro, percorre a lista inteira
-		// e insere o elemento apÛs a ultima posiÁ„o
+		// e insere o elemento ap√≥s a ultima posi√ß√£o
 		aux = adj[v];
 
 		while (aux->prox != NULL)
@@ -229,19 +232,46 @@ void defineGrau(no *adj[], int n) {
 
 }
 
-void buscaEmLargura(no *adj[], int n) {
-	no* u;
+void BFS(no *adj[], int n) {
+	no* u, *ante, *aux;
 	cores *c;
-	int *d, *ante;
+	int *d;
+	std::queue<no*> q;
+
 	c = (cores*)malloc((n) * sizeof(cores*));
 	d = (int*)malloc((n) * sizeof(int*));
-	ante = NULL;
-
+	ante = (no*)malloc((n) * sizeof(no*));
+	
 	//Inicia com todos brancos
-	for (int i = 0; i < n;i++) {
+	for (int i = 0; i < n; i++) {
 		c[i] = BRANCO;
 	}
 
-	
+	c[0] = CINZA;
+	d[0] = 0;
+	//colocar ante[0]=NULL
+
+	q.push(adj[0]);
+	while (!q.empty()) {
+		u = q.front();
+ 		aux = u;
+		q.pop();
+		
+		while (aux != NULL)
+		{
+			if (c[aux->vertice] == BRANCO) {
+				c[aux->vertice] = CINZA;
+				d[aux->vertice] = d[u->vertice] + 1;
+				ante[aux->vertice] = *u;
+				q.push(adj[aux->vertice]);
+			}
+			c[u->vertice] = PRETO;
+			aux = aux->prox;
+		}
+	}
+	printf("Vetor D:\n");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", c[i]);
+	}
 
 }
