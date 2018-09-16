@@ -233,45 +233,54 @@ void defineGrau(no *adj[], int n) {
 }
 
 void BFS(no *adj[], int n) {
-	no* u, *ante, *aux;
+	no *v;
 	cores *c;
-	int *d;
-	std::queue<no*> q;
+	int *d, *ante, u;
+	std::queue<int> q;
 
 	c = (cores*)malloc((n) * sizeof(cores*));
 	d = (int*)malloc((n) * sizeof(int*));
-	ante = (no*)malloc((n) * sizeof(no*));
+	ante = (int*)malloc((n) * sizeof(int*));
 	
 	//Inicia com todos brancos
 	for (int i = 0; i < n; i++) {
 		c[i] = BRANCO;
+		d[i] = 0;
+		ante[i] = 0;
 	}
-
 	c[0] = CINZA;
 	d[0] = 0;
-	//colocar ante[0]=NULL
+	ante[0] = -1;
 
-	q.push(adj[0]);
+	q.push(0);
 	while (!q.empty()) {
 		u = q.front();
- 		aux = u;
 		q.pop();
+		v = adj[u];
 		
-		while (aux != NULL)
+		while (v != NULL)
 		{
-			if (c[aux->vertice] == BRANCO) {
-				c[aux->vertice] = CINZA;
-				d[aux->vertice] = d[u->vertice] + 1;
-				ante[aux->vertice] = *u;
-				q.push(adj[aux->vertice]);
+			if (c[v->vertice] == BRANCO) {
+				c[v->vertice] = CINZA;
+				d[v->vertice] = d[u] + 1;
+				ante[v->vertice] = u;
+				q.push(v->vertice);
 			}
-			c[u->vertice] = PRETO;
-			aux = aux->prox;
+			c[u] = PRETO;
+			v = v->prox;
 		}
 	}
-	printf("Vetor D:\n");
+	printf("\nVetor D:\n");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", d[i]);
+	}
+	printf("\nVetor C:\n");
 	for (int i = 0; i < n; i++) {
 		printf("%d ", c[i]);
 	}
 
+	printf("\nVetor ante:\n");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", ante[i]);
+	}
 }
