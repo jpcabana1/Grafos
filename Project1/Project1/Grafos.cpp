@@ -36,6 +36,10 @@ void imprime_grafo(no* adj[], int n);
 void converter(no *adj[], int n);
 void defineGrau(no *adj[], int n);
 void BFS(no *adj[], int n);
+void raio(int *d, int n);
+void diametro(int *d, int n);
+void imprimeVetor(int *v, int n);
+void imprimeVetor(cores *v, int n);
 
 // Funcao principal (ponto de entrada do programa).
 int main() {
@@ -56,7 +60,9 @@ int main() {
 	defineGrau(lista_adj, numVertices);
 	//libera memoria
 
-	BFS(lista_adj, numVertices);
+    BFS(lista_adj, numVertices);
+	
+
 	desaloca_grafo(lista_adj, numVertices);
 
 	//espera digitar um caracter
@@ -248,6 +254,7 @@ void BFS(no *adj[], int n) {
 		d[i] = 0;
 		ante[i] = 0;
 	}
+
 	c[0] = CINZA;
 	d[0] = 0;
 	ante[0] = -1;
@@ -270,17 +277,46 @@ void BFS(no *adj[], int n) {
 			v = v->prox;
 		}
 	}
-	printf("\nVetor D:\n");
-	for (int i = 0; i < n; i++) {
-		printf("%d ", d[i]);
-	}
-	printf("\nVetor C:\n");
-	for (int i = 0; i < n; i++) {
-		printf("%d ", c[i]);
-	}
 
-	printf("\nVetor ante:\n");
+
+	printf("\nVetor distancia:\n\n");
+	imprimeVetor(d, n);
+	printf("\nVetor anterior\n\n");
+	imprimeVetor(ante, n);
+	printf("\nVetor cor\n\n");
+	imprimeVetor(c, n);
+	printf("\n\n");
+	diametro(d,n);
+	printf("\n");
+	raio(d,n);
+	printf("\n");
+}
+
+void diametro(int *d, int n) {
+	int maior = 0;
+	for (int i = 0;i < numVertices; i++) {
+		if (d[i] > maior)
+			maior = d[i];
+	}
+	printf("Diametro do grafo = %d\n",maior);
+}
+
+void raio(int *d, int n) {
+	int menor = numVertices;
+	for (int i = 0; i < numVertices; i++) {
+		if (d[i] > menor)
+			menor = d[i];
+	}
+	printf("Raio do grafo = %d\n", menor);
+}
+
+void imprimeVetor(int *v,int n) {
 	for (int i = 0; i < n; i++) {
-		printf("%d ", ante[i]);
+		printf("%d ", v[i]);
+	}
+}
+void imprimeVetor(cores *v, int n) {
+	for (int i = 0; i < n; i++) {
+		printf("%d ", v[i]);
 	}
 }
